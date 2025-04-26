@@ -30,7 +30,25 @@ response = requests.get(randomlists_url)
 words_list = json.loads(response.text)
 print('{0} words selected from {1}'.format(len(words_list), randomlists_url))
 
-driver = webdriver.Edge()
+# Setup Edge options with stealth settings
+options = webdriver.EdgeOptions()
+options.add_argument("start-maximized")
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+options.add_experimental_option('useAutomationExtension', False)
+
+# Initialize Edge driver with options
+driver = webdriver.Edge(options=options)
+
+# Add custom scripts to mask automation indicators
+driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+    "source": """
+    // Overwrite the 'navigator.webdriver' property to undefined
+    Object.defineProperty(navigator, 'webdriver', {
+        get: () => undefined
+    });
+    """
+})
+
 wait_for()
 driver.get("https://rewards.bing.com")
 wait_for(30)

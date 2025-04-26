@@ -47,9 +47,11 @@ mobile_emulation = {
     "userAgent": selected_user_agent
 }
 
-# Set up Edge options with mobile emulation
+# Set up Edge options with mobile emulation and anti-detection features
 edge_options = webdriver.EdgeOptions()
 edge_options.add_experimental_option("mobileEmulation", mobile_emulation)
+edge_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+edge_options.add_experimental_option('useAutomationExtension', False)
 
 # Create Edge WebDriver instance with options
 driver = webdriver.Edge(options=edge_options)
@@ -58,6 +60,16 @@ driver = webdriver.Edge(options=edge_options)
 window_width = random.randint(350, 390)
 window_height = random.randint(620, 680)
 driver.set_window_size(window_width, window_height)
+
+# Add custom script to hide automation indicators
+driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+    "source": """
+    // Hide webdriver property
+    Object.defineProperty(navigator, 'webdriver', {
+        get: () => undefined
+    });
+    """
+})
 
 # Load Bing rewards page
 driver.get("https://rewards.bing.com")
