@@ -33,6 +33,11 @@ The project utilizes the Selenium library to automate Bing searches for a list o
   - Different scrolling depths on results pages
 - **Robust error handling** with detailed logging for troubleshooting.
 - **Cross-platform compatibility** supporting Windows, macOS, and Linux environments.
+- **Enhanced browser automation stealth**:
+  - Disables automation flags and indicators
+  - Modifies browser fingerprinting to avoid detection
+  - Implements custom JavaScript to mask WebDriver presence
+  - Simulates genuine user behavior patterns to evade bot detection systems
 
 ## Getting Started
 
